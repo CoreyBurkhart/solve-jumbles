@@ -14,22 +14,15 @@ WORD_LENGTHS = [6, 8]
 
 def main(letters, word_lengths):
     """encapulates program."""
-    file_names = os.listdir('static')
-    words = []
+    
+    # Print disclaimer
+    print 'Getting matches. This may take a while...'
 
-    for name in file_names:
-        with open('static/' + name, 'r') as csv_file:
-            reader = csv.reader(csv_file)
-            for row in reader:
-                try:
-                    if row[0] != '#NAME?':
-                        words.append(row[0])
-                except IndexError:
-                    pass
-
+    words = get_all_words_as_list_from('static')
     filtered = filter_by_length(words, word_lengths)
     matches = find_matches(filtered, letters)
     pretty_matches = []
+
 
     # filter duplicates and print matches all pretty-like
     for match in matches:
@@ -39,9 +32,24 @@ def main(letters, word_lengths):
             if temp not in pretty_matches:
                 pretty_matches.append(temp)
 
-    for index, value in enumerate(pretty_matches):
-        print str(index + 1) + ' - ' + value
+    for value in pretty_matches:
+        print ' - ' + value
 
+
+def get_all_words_as_list_from(path):
+    """Get all words as list from files in static"""
+    file_names = os.listdir(path)
+    words = []
+    for name in file_names:
+        with open(path + '/' + name, 'r') as csv_file:
+            reader = csv.reader(csv_file)
+            for row in reader:
+                try:
+                    if row[0] != '#NAME?':
+                        words.append(row[0])
+                except IndexError:
+                    pass
+    return words
 
 
 def filter_by_length(all_words, lengths):
