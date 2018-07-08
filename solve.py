@@ -3,8 +3,6 @@
 """Finds word combinations that uses a list of letters and the length of the words in
 the sentence."""
 
-import os
-import csv
 import sys
 import ast
 
