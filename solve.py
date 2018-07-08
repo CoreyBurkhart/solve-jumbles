@@ -18,7 +18,7 @@ def main(letters, word_lengths):
     # Print disclaimer
     print 'Getting matches. This may take a while...'
 
-    words = get_all_words_as_list_from('static')
+    words = get_dictionary('/usr/share/dict/words')
     filtered = filter_by_length(words, word_lengths)
     matches = find_matches(filtered, letters)
     pretty_matches = []
@@ -36,19 +36,14 @@ def main(letters, word_lengths):
         print ' - ' + value
 
 
-def get_all_words_as_list_from(path):
-    """Get all words as list from files in static"""
-    file_names = os.listdir(path)
+def get_dictionary(path):
+    """Get all words from path as a list"""
     words = []
-    for name in file_names:
-        with open(path + '/' + name, 'r') as csv_file:
-            reader = csv.reader(csv_file)
-            for row in reader:
-                try:
-                    if row[0] != '#NAME?':
-                        words.append(row[0])
-                except IndexError:
-                    pass
+
+    # get the words and strip the newline character off the end of each
+    with open(path, 'r') as words_file:
+        words = map(lambda w: w[:-1], words_file.readlines())
+
     return words
 
 
